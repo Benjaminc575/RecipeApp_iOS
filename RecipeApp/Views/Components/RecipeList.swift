@@ -10,39 +10,33 @@ import SwiftUI
 struct RecipeList: View {
     var recipes: [Recipe]
     
-    
     var body: some View {
         VStack {
             HStack {
                 Text("\(recipes.count) \(recipes.count > 1 ? "recipes" : "recipe")")
                     .font(.headline)
                     .fontWeight(.medium)
-                .opacity(0.7)
+                    .opacity(0.7)
                 
                 Spacer()
             }
+            .padding(.horizontal)
             
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 15)], spacing: 15) {
-                ForEach(recipes) { recipe in
-                    NavigationLink(destination: RecipeView(recipe:recipe)){
-                        RecipeCard(recipe: recipe)
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 160), spacing: 10)], spacing: 10) {
+                    ForEach(recipes) { recipe in
+                        NavigationLink(destination: RecipeView(recipe: recipe)) {
+                            RecipeCard(recipe: recipe)
+                        }
                     }
-                    
                 }
-                
-                
+                .padding(.horizontal)
             }
-            .padding(.top)
-            
-            
         }
-        .padding(.horizontal)
+        .padding(.top)
     }
 }
-    
+
 #Preview {
-    ScrollView {
-        RecipeList(recipes: Recipe.all)
-    }
+    RecipeList(recipes: Recipe.all)
 }
-        
