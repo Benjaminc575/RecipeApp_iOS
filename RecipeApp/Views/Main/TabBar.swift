@@ -23,6 +23,7 @@ struct TabBar: View {
             AddRecipeView()
                 .tabItem {
                     Label("New", systemImage: "plus.app")
+                 
                 }
             
             FavoritesView()
@@ -34,10 +35,12 @@ struct TabBar: View {
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
+           
         }
     }
 }
 
 #Preview {
     TabBar()
+        .environmentObject(RecipesViewModel())
 }

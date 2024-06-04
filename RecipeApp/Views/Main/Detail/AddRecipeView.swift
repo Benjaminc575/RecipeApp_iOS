@@ -8,17 +8,22 @@
 import SwiftUI
 
 struct AddRecipeView: View {
-    // states will only be used in this view.
+    @EnvironmentObject var recipesVM: RecipesViewModel
+    
     @State private var name: String = ""
     @State private var selectedCategory: Category = Category.main
     @State private var description: String = ""
     @State private var ingredients: String = ""
     @State private var directions: String = ""
+    @State private var navigateToRecipe = false
     
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        NavigationView {
+        //NewRecipeView()
+        
+        NavigationStack {
+            //NewRecipeView()
             Form {
                 Section(header: Text("Name")){
                     TextField("Recipe Name", text: $name )
@@ -45,7 +50,6 @@ struct AddRecipeView: View {
                 
                 Section(header: Text("Directions")) {
                     TextEditor(text: $directions)
-                    //binding
                 }
             }
             .toolbar(content: {
@@ -59,22 +63,32 @@ struct AddRecipeView: View {
                 }
                 
                 ToolbarItem {
-                    Button{
-                        
+                    Button {
+                        navigateToRecipe = true
                     } label: {
-                    Label("Done", systemImage: "checkmark")
-                        .labelStyle(.iconOnly)
+                        Label("Done", systemImage: "checkmark")
+                            .labelStyle(.iconOnly)
                     }
                     .disabled(name.isEmpty)
                 }
+                
             })
-            .navigationTitle("New Recipe")
+            //.navigationTitle("New Recipe")
             .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(isPresented: $navigateToRecipe) {
+                //NewRecipeView()
+                RecipeView(recipe: recipesVM.recipes.sorted{ $0.datePublished > $1.datePublished }[0])
+                    .navigationBarBackButtonHidden(true)
+            
+            }
+            // TODO: Fix New Recipe View Bug
         }
-        .navigationViewStyle(.stack)
+    
     }
+
 }
 
 #Preview {
     AddRecipeView()
+        .environmentObject(RecipesViewModel())
 }
